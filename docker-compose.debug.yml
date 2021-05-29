@@ -7,3 +7,15 @@ services:
     ports:
       - "5000:5000"
       - "40000:40000"
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:9.6-alpine
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_DB: converter
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
