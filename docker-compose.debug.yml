@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  currency_converter:
+    build:
+      context: .
+      dockerfile: Dockerfile.debug
+    ports:
+      - "5000:5000"
+      - "40000:40000"
