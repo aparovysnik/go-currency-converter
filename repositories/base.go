@@ -1,8 +1,7 @@
 package repositories
 
 import (
-	"log"
-
+	"github.com/aparovysnik/go-currency-converter/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -19,10 +18,7 @@ func SetupDB() (*gorm.DB, error) {
 	dsn := "host=postgres user=user password=password dbname=converter port=5432 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
-	if err != nil {
-		log.Fatalf("models.Setup err: %v", err)
-		return nil, err
-	}
+	db.AutoMigrate(&models.Project{})
 
-	return db, nil
+	return db, err
 }

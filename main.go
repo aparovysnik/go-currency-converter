@@ -1,12 +1,9 @@
 package main
 
 import (
-	"github.com/aparovysnik/go-currency-converter/repositories"
-	"github.com/aparovysnik/go-currency-converter/router"
+	"github.com/aparovysnik/go-currency-converter/app"
 )
 
 func main() {
-	r := router.Init()
-	repositories.SetupDB()
-	r.Run()
+	app.Initialize()
 }
