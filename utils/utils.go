@@ -32,3 +32,14 @@ func GenerateRandomString(n int) (string, error) {
 
 	return string(ret), nil
 }
+
+//ContainsString checks if a string slice contains a string
+func ContainsString(collection []string, value string) bool {
+	for _, v := range collection {
+		if v == value {
+			return true
+		}
+	}
+
+	return false
+}
