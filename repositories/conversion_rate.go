@@ -10,7 +10,7 @@ type conversionRate struct {
 }
 
 type ConversionRate interface {
-	Add(conversionRate models.ConversionRate) error
+	AddOrUpdate(conversionRate models.ConversionRate) error
 }
 
 func NewConversionRateRepository(db *gorm.DB) ConversionRate {
@@ -20,8 +20,16 @@ func NewConversionRateRepository(db *gorm.DB) ConversionRate {
 }
 
 // Add adds a single conversion rate to the collection
-func (repo *conversionRate) Add(conversionRate models.ConversionRate) error {
-	if err := repo.db.Create(&conversionRate).Error; err != nil {
+func (repo *conversionRate) AddOrUpdate(conversionRate models.ConversionRate) error {
+	var existingRate models.ConversionRate
+	result := repo.db.Find(&existingRate, "from_currency = ? AND to_currency = ?",
+		conversionRate.FromCurrency, conversionRate.ToCurrency)
+
+	if result.RowsAffected > 0 {
+		if err := repo.db.Save(&conversionRate).Error; err != nil {
+			return err
+		}
+	} else if err := repo.db.Create(&conversionRate).Error; err != nil {
 		return err
 	}
 

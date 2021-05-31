@@ -12,6 +12,7 @@ func SetupDB() (*gorm.DB, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	db.AutoMigrate(&models.Project{})
+	db.AutoMigrate(&models.ConversionRate{})
 
 	return db, err
 }
