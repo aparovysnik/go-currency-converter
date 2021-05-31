@@ -2,6 +2,7 @@ package app
 
 import (
 	"log"
+	"time"
 
 	v1 "github.com/aparovysnik/go-currency-converter/api/v1"
 	"github.com/aparovysnik/go-currency-converter/config"
@@ -9,6 +10,7 @@ import (
 	"github.com/aparovysnik/go-currency-converter/repositories"
 	"github.com/aparovysnik/go-currency-converter/services"
 	"github.com/gin-gonic/gin"
+	"github.com/go-co-op/gocron"
 )
 
 func Initialize() {
@@ -30,6 +32,7 @@ func Initialize() {
 
 	//Init repositories
 	projectRepository := repositories.NewProjectRepository(db)
+	conversionRateRepository := repositories.NewConversionRateRepository(db)
 
 	//Init services
 	projectService := services.NewProjectService(projectRepository)
@@ -44,6 +47,11 @@ func Initialize() {
 	{
 		v1.InitCurrencyConversion(authGroup, converterService, config)
 	}
+
+	//Setup poll job
+	scheduler := gocron.NewScheduler(time.UTC)
+	scheduler.Every("30s").Do(services.UpdateConversionRate, conversionRateRepository)
+	scheduler.StartAsync()
 
 	//Serve API
 	ginEngine.Run()
