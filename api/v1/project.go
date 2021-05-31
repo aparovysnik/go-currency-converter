@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"github.com/aparovysnik/go-currency-converter/models"
-	"github.com/aparovysnik/go-currency-converter/repositories"
+	"github.com/aparovysnik/go-currency-converter/api/v1/models"
+	"github.com/aparovysnik/go-currency-converter/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,25 +11,45 @@ type Project interface {
 }
 
 type project struct {
-	repository repositories.Project
+	service services.Project
 }
 
-func InitProjectController(ginEngine *gin.Engine, repository repositories.Project) {
+func InitProjectController(ginEngine *gin.Engine, service services.Project) {
 	project := project{
-		repository: repository,
+		service: service,
 	}
 	ginEngine.POST("/project", project.Register)
 }
 
 func (project *project) Register(c *gin.Context) {
-	err := project.repository.Add(models.Project{})
-	if err != nil {
-		c.JSON(500, gin.H{
-			"message": "Something went wrong.",
+	reqBody := new(models.AddProjectRequest)
+	err := c.Bind(reqBody)
+
+	if err != nil || !reqBody.IsValid() {
+		c.JSON(400, models.ErrorResponse{
+			BaseResponse: models.BaseResponse{
+				Status: 400,
+			},
+			Message: "Invalid request",
 		})
-	} else {
-		c.JSON(200, gin.H{
-			"message": "Value added.",
-		})
+		return
 	}
+
+	apiKey, err := project.service.Register(reqBody.ContactEmail)
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{
+			BaseResponse: models.BaseResponse{
+				Status: 500,
+			},
+			Message: "Something went wrong.",
+		})
+		return
+	}
+
+	c.JSON(200, models.AddProjectResponse{
+		BaseResponse: models.BaseResponse{
+			Status: 200,
+		},
+		ApiKey: apiKey,
+	})
 }

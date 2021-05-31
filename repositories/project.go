@@ -13,7 +13,7 @@ type Project interface {
 	Add(project models.Project) error
 }
 
-func NewProjectRepository(db *gorm.DB) *project {
+func NewProjectRepository(db *gorm.DB) Project {
 	return &project{
 		db: db,
 	}
