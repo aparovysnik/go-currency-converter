@@ -5,6 +5,7 @@ import (
 
 	v1 "github.com/aparovysnik/go-currency-converter/api/v1"
 	"github.com/aparovysnik/go-currency-converter/config"
+	"github.com/aparovysnik/go-currency-converter/middleware"
 	"github.com/aparovysnik/go-currency-converter/repositories"
 	"github.com/aparovysnik/go-currency-converter/services"
 	"github.com/gin-gonic/gin"
@@ -37,7 +38,12 @@ func Initialize() {
 	//Init controllers
 	v1.InitHealthController(ginEngine)
 	v1.InitProjectController(ginEngine, projectService)
-	v1.InitCurrencyConversion(ginEngine, converterService, config)
+
+	authGroup := ginEngine.Group("/")
+	authGroup.Use(middleware.Authenticate(projectRepository))
+	{
+		v1.InitCurrencyConversion(authGroup, converterService, config)
+	}
 
 	//Serve API
 	ginEngine.Run()

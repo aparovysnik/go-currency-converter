@@ -28,10 +28,7 @@ func (srv *project) Register(contactEmail string) (string, error) {
 	}
 
 	//Compute API key hash
-	apiKeyHash, err := utils.ComputeHash(apiKey)
-	if err != nil {
-		return "", err
-	}
+	apiKeyHash := utils.ComputeHash(apiKey)
 
 	newProject := models.Project{
 		ContactEmail: contactEmail,

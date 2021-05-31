@@ -4,18 +4,14 @@ import (
 	"crypto/rand"
 	"math/big"
 
-	"golang.org/x/crypto/bcrypt"
+	"crypto/sha256"
 )
 
 //ComputeHash calculates hash of a string
-func ComputeHash(input string) (string, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(input), bcrypt.MinCost)
+func ComputeHash(input string) []byte {
+	hash := sha256.Sum256([]byte(input))
 
-	if err != nil {
-		return "", err
-	}
-
-	return string(hash), nil
+	return hash[:]
 }
 
 //GenerateRandomString returns a random string of n chars

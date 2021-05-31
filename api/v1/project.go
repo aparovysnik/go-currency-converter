@@ -18,6 +18,7 @@ func InitProjectController(ginEngine *gin.Engine, service services.Project) {
 	project := project{
 		service: service,
 	}
+
 	ginEngine.POST("/project", project.Register)
 }
 

@@ -16,13 +16,13 @@ type currencyConversion struct {
 	config  config.Config
 }
 
-func InitCurrencyConversion(ginEngine *gin.Engine, service services.CurrencyConverter,
+func InitCurrencyConversion(ginGroup *gin.RouterGroup, service services.CurrencyConverter,
 	config config.Config) {
 	controller := currencyConversion{
 		service: service,
 		config:  config,
 	}
-	ginEngine.GET("/currency/convert", controller.Convert)
+	ginGroup.GET("/currency/convert", controller.Convert)
 }
 
 func (controller *currencyConversion) Convert(c *gin.Context) {
