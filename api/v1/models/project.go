@@ -1,12 +1,12 @@
 package models
 
 type AddProjectRequest struct {
-	ContactEmail string
+	ContactEmail string `json:"contactEmail"`
 }
 
 type AddProjectResponse struct {
 	BaseResponse
-	ApiKey string
+	ApiKey string `json:"apiKey"`
 }
 
 // Validate model

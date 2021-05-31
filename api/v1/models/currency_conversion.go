@@ -7,15 +7,15 @@ import (
 
 //ConvertCurrencyRequest represents currency conversion request data
 type ConvertCurrencyRequest struct {
-	Amount       float32
-	FromCurrency string
-	ToCurrency   string
+	Amount       float32 `form:"amount"`
+	FromCurrency string  `form:"fromCurrency"`
+	ToCurrency   string  `form:"toCurrency"`
 }
 
 //ConvertCurrencyResponse represents currency conversion response data
 type ConvertCurrencyResponse struct {
 	BaseResponse
-	Amount float32
+	Amount float32 `json:"amount"`
 }
 
 // IsValid validates request model

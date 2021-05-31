@@ -2,5 +2,5 @@ package models
 
 type ErrorResponse struct {
 	BaseResponse
-	Message string
+	Message string `json:"message"`
 }

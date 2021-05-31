@@ -1,5 +1,5 @@
 package models
 
 type BaseResponse struct {
-	Status int
+	Status int `json:"status"`
 }
