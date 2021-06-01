@@ -6,13 +6,26 @@ import (
 
 	v1 "github.com/aparovysnik/go-currency-converter/api/v1"
 	"github.com/aparovysnik/go-currency-converter/config"
+	_ "github.com/aparovysnik/go-currency-converter/docs"
 	"github.com/aparovysnik/go-currency-converter/middleware"
 	"github.com/aparovysnik/go-currency-converter/repositories"
 	"github.com/aparovysnik/go-currency-converter/services"
 	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title Go Currency Converter API
+// @version 0.1
+// @description An API to convert currencies
+
+// @contact.name A Parovysnik
+// @contact.email a.parovysnik@gmail.com
+
+// @host localhost:17249
+// @BasePath /
+// @schemes http
 func Initialize() {
 
 	//init DB
@@ -52,6 +65,10 @@ func Initialize() {
 	scheduler := gocron.NewScheduler(time.UTC)
 	scheduler.Every("30s").Do(services.UpdateConversionRate, conversionRateRepository, config)
 	scheduler.StartAsync()
+
+	//Add Swagger
+	swagUrl := ginSwagger.URL("http://localhost:17249/swagger/doc.json") // The url pointing to API definition
+	ginEngine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, swagUrl))
 
 	//Serve API
 	ginEngine.Run()

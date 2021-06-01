@@ -1,6 +1,6 @@
 package models
 
-type ErrorResponse struct {
+type StatusResponse struct {
 	BaseResponse
 	Message string `json:"message"`
 }

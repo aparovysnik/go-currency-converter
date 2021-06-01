@@ -24,12 +24,21 @@ func InitProjectController(ginEngine *gin.Engine, service services.Project) {
 	ginEngine.POST("/project", project.Register)
 }
 
+// Register godoc
+// @Summary Registers a new project.
+// @Description register a new project.
+// @Tags Project
+// @Accept */*
+// @Produce json
+// @Param contactEmail body string true "Contact email details"
+// @Success 200 {object} models.ConvertCurrencyResponse{}
+// @Router /project [post]
 func (project *project) Register(c *gin.Context) {
 	reqBody := new(models.AddProjectRequest)
 	err := c.Bind(reqBody)
 
 	if err != nil || !reqBody.IsValid() {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+		c.JSON(http.StatusBadRequest, models.StatusResponse{
 			BaseResponse: models.BaseResponse{
 				Status: http.StatusBadRequest,
 			},
@@ -40,7 +49,7 @@ func (project *project) Register(c *gin.Context) {
 
 	apiKey, err := project.service.Register(reqBody.ContactEmail)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, models.StatusResponse{
 			BaseResponse: models.BaseResponse{
 				Status: http.StatusInternalServerError,
 			},

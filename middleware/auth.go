@@ -24,7 +24,7 @@ func Authenticate(projectRepo repositories.Project) gin.HandlerFunc {
 		}
 
 		if !success {
-			c.JSON(http.StatusUnauthorized, models.ErrorResponse{
+			c.JSON(http.StatusUnauthorized, models.StatusResponse{
 				BaseResponse: models.BaseResponse{
 					Status: http.StatusUnauthorized,
 				},

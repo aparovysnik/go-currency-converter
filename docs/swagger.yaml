@@ -1,0 +1,87 @@
+definitions:
+  models.ConvertCurrencyResponse:
+    properties:
+      amount:
+        type: number
+      status:
+        type: integer
+    type: object
+  models.StatusResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /currency/convert:
+    get:
+      consumes:
+      - '*/*'
+      description: convert an amount of money from one currency to another.
+      parameters:
+      - description: Amount to convert
+        in: query
+        name: amount
+        required: true
+        type: integer
+      - description: Code of currency to convert from
+        in: query
+        name: fromCurrency
+        required: true
+        type: string
+      - description: Code of currency to convert to
+        in: query
+        name: amount
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ConvertCurrencyResponse'
+      summary: Converts the given amount of money.
+      tags:
+      - root
+  /health:
+    get:
+      consumes:
+      - '*/*'
+      description: get the status indicating if the server is operational.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.StatusResponse'
+      summary: Gets the status of the server.
+      tags:
+      - root
+  /project:
+    post:
+      consumes:
+      - '*/*'
+      description: register a new project.
+      parameters:
+      - description: Contact email details
+        in: body
+        name: contactEmail
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ConvertCurrencyResponse'
+      summary: Registers a new project.
+      tags:
+      - Project
+swagger: "2.0"
