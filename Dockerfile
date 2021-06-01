@@ -30,6 +30,7 @@ RUN cp /build/main .
 FROM scratch
 
 COPY --from=builder /dist/main /
+COPY --from=builder /build/config/config.yaml /config/config.yaml
 
 # Command to run
 ENTRYPOINT ["/main"]
