@@ -36,7 +36,7 @@ func Initialize() {
 
 	//Init services
 	projectService := services.NewProjectService(projectRepository)
-	converterService := services.NewCurrencyConverter()
+	converterService := services.NewCurrencyConverter(conversionRateRepository)
 
 	//Init controllers
 	v1.InitHealthController(ginEngine)

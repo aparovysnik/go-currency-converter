@@ -1,6 +1,8 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/aparovysnik/go-currency-converter/api/v1/models"
 	"github.com/aparovysnik/go-currency-converter/config"
 	"github.com/aparovysnik/go-currency-converter/services"
@@ -39,7 +41,17 @@ func (controller *currencyConversion) Convert(c *gin.Context) {
 		return
 	}
 
-	result := controller.service.Convert(reqBody.Amount, reqBody.FromCurrency, reqBody.ToCurrency)
+	result, err := controller.service.Convert(reqBody.Amount, reqBody.FromCurrency, reqBody.ToCurrency)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+			BaseResponse: models.BaseResponse{
+				Status: http.StatusInternalServerError,
+			},
+			Message: "Something went wrong.",
+		})
+		return
+	}
 
 	c.JSON(200, models.ConvertCurrencyResponse{
 		BaseResponse: models.BaseResponse{
