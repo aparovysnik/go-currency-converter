@@ -21,6 +21,6 @@ type ConvertCurrencyResponse struct {
 // IsValid validates request model
 func (req *ConvertCurrencyRequest) IsValid(config config.Config) bool {
 	return req.Amount >= 0 &&
-		utils.ContainsString(config.SupportedCurrencies, req.FromCurrency) &&
+		req.FromCurrency == "EUR" &&
 		utils.ContainsString(config.SupportedCurrencies, req.ToCurrency)
 }
