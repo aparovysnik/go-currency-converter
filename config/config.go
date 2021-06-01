@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	SupportedCurrencies []string
+	FixerAccessKey      string
 }
 
 func Load() Config {
@@ -20,5 +21,6 @@ func Load() Config {
 	}
 	return Config{
 		SupportedCurrencies: viper.GetStringSlice("supported_currencies"),
+		FixerAccessKey:      viper.GetString("fixer_access_key"),
 	}
 }

@@ -20,16 +20,18 @@ func NewConversionRateRepository(db *gorm.DB) ConversionRate {
 }
 
 // Add adds a single conversion rate to the collection
-func (repo *conversionRate) AddOrUpdate(conversionRate models.ConversionRate) error {
+func (repo *conversionRate) AddOrUpdate(newRate models.ConversionRate) error {
 	var existingRate models.ConversionRate
-	result := repo.db.Find(&existingRate, "from_currency = ? AND to_currency = ?",
-		conversionRate.FromCurrency, conversionRate.ToCurrency)
+	result := repo.db.Where("from_currency = ? AND to_currency = ?",
+		newRate.FromCurrency, newRate.ToCurrency).
+		Find(&existingRate)
 
 	if result.RowsAffected > 0 {
-		if err := repo.db.Save(&conversionRate).Error; err != nil {
+		existingRate.Rate = newRate.Rate
+		if err := repo.db.Save(&existingRate).Error; err != nil {
 			return err
 		}
-	} else if err := repo.db.Create(&conversionRate).Error; err != nil {
+	} else if err := repo.db.Create(&newRate).Error; err != nil {
 		return err
 	}
 
