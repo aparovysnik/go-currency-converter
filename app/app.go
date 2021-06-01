@@ -63,7 +63,7 @@ func Initialize() {
 
 	//Setup poll job
 	scheduler := gocron.NewScheduler(time.UTC)
-	scheduler.Every("30s").Do(services.UpdateConversionRate, conversionRateRepository, config)
+	scheduler.Every("1h").Do(services.UpdateConversionRate, conversionRateRepository, config)
 	scheduler.StartAsync()
 
 	//Add Swagger
