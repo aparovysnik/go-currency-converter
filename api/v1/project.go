@@ -1,6 +1,8 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/aparovysnik/go-currency-converter/api/v1/models"
 	"github.com/aparovysnik/go-currency-converter/services"
 	"github.com/gin-gonic/gin"
@@ -27,9 +29,9 @@ func (project *project) Register(c *gin.Context) {
 	err := c.Bind(reqBody)
 
 	if err != nil || !reqBody.IsValid() {
-		c.JSON(400, models.ErrorResponse{
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			BaseResponse: models.BaseResponse{
-				Status: 400,
+				Status: http.StatusBadRequest,
 			},
 			Message: "Invalid request",
 		})
@@ -38,18 +40,18 @@ func (project *project) Register(c *gin.Context) {
 
 	apiKey, err := project.service.Register(reqBody.ContactEmail)
 	if err != nil {
-		c.JSON(500, models.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
 			BaseResponse: models.BaseResponse{
-				Status: 500,
+				Status: http.StatusInternalServerError,
 			},
 			Message: "Something went wrong.",
 		})
 		return
 	}
 
-	c.JSON(200, models.AddProjectResponse{
+	c.JSON(http.StatusOK, models.AddProjectResponse{
 		BaseResponse: models.BaseResponse{
-			Status: 200,
+			Status: http.StatusOK,
 		},
 		ApiKey: apiKey,
 	})
