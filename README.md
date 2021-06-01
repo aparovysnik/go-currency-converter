@@ -18,6 +18,8 @@ In order to run the app, execute
 Currency conversion API requests require fixer_access_key to be specified in config/config.yaml file.
 This property needs to be set to a valid fixer API key.
 
+This application sets up an ongoing poller to update the conversion rates hourly.
+
 # Accessing Swagger documentation
 Swagger docs are located in docs/swagger.json and can be accessed through http://localhost:17249/swagger/index.html
 when running the application locally
